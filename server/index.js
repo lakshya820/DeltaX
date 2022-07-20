@@ -10,7 +10,7 @@ const db = mysql.createConnection({
     user:'root' ,
     host:'localhost' ,
     password:'password' ,
-    database: 'spotify-clone' ,
+    database: 'spotify_clone' ,
 })
 
 app.post('/create', (req, res) => {
@@ -32,6 +32,25 @@ app.post('/create', (req, res) => {
 
 });
 
+app.post('/create1', (req, res) => {
+  const name=req.body.name;
+  const bio=req.body.bio;
+  const dor=req.body.dor;
+
+  db.query(
+      "insert into artists(name,dob,bio) values(?,?,?)",
+       [name,dor,bio], 
+       (err,result ) => {
+          if(err){
+              console.log(err)
+          } else{
+              res.send("Values inserted")
+          }
+       }
+       );
+
+});
+
 app.get("/songs", (req, res) => {
     db.query("SELECT * FROM songs", (err, result) => {
       if (err) {
@@ -42,8 +61,19 @@ app.get("/songs", (req, res) => {
     });
   });
   
-  app.put("/update", (req, res) => {
+app.get("/songs1", (req, res) => {
+    db.query("SELECT    * FROM      (SELECT * FROM songs ORDER BY rating DESC LIMIT 10) dt ORDER BY  dt.rating DESC", (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+});
+
+app.put("/update", (req, res) => {
     const id = req.body.id;
+    const artist=req.body.artist;
     db.query("UPDATE songs SET artist = ? WHERE id = ?",
       [artist, id],
       (err, result) => {
@@ -55,7 +85,7 @@ app.get("/songs", (req, res) => {
       });
   });
   
-  app.delete("/delete/:id", (req, res) => {
+app.delete("/delete/:id", (req, res) => {
     const id = req.params.id;
     db.query("DELETE FROM songs WHERE id = ?", id, (err, result) => {
       if (err) {

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from "react";
 import Axios from "axios";
-import "./AddArtist.css"
+
+import NewWindow from 'react-new-window'
 
 function AddArtist() {
   const [name, setName] = useState("");
-  const [artist, setArtist] = useState("");
+  const [bio, setBio] = useState("");
   const [dor, setDor] = useState("");
 
   const [newArtist, setNewArtist] = useState("");
@@ -13,9 +14,9 @@ function AddArtist() {
   const [songsList, setSongsList] = useState([]);
 
   const addSongs = () => {
-    Axios.post("http://localhost:3000/create", {
+    Axios.post("http://localhost:3000/create1", {
       name: name,
-      artist: artist,
+      bio: bio,
       dor: dor,
     }).then(() => {
       console.log("success");
@@ -60,75 +61,39 @@ function AddArtist() {
   };
 
   return (
+    
     <div className="App">
       <div className="information">
-      <h2>Adding a new Song</h2>
+      <h2>Adding Artist</h2>
       <div class="block">
-                <label for="fname">Song Name</label>
+                <label for="fname">Artist Name</label>
           <input class="fname" type="text" name="name" onChange={(event) => {
             setName(event.target.value);
           }} />
       </div>
       <div class="block">
-                <label for="">Artist:</label>
+                <label for="">Date Of Birth</label>
                 <input type="text" name="name" placeholder="" onChange={(event) => {
-            setArtist(event.target.value);
+            setDor(event.target.value);
           }}/>
-          <button className="Bt" onclick="OpenWindow()">Add Artist</button>
-      </div>
+         <div>
       
       <div class="block">
-                <label for="">Date Released</label>
+                <label for="">Bio</label>
                 <input type="text" name="name" placeholder=""  onChange={(event) => {
-            setDor(event.target.value);
+            setBio(event.target.value);
           }}/>
         </div>  
         
         
         <button onClick={addSongs}>Submit</button>
       </div>
-      <div className="songs">
-        <button onClick={getSongs}>Show Songs</button>
-
-        {songsList.map((val, key) => {
-          return (
-            <div className="songs">
-              <div>
-                <h3>Name: {val.name}</h3>
-                <h3>Artist: {val.artist}</h3>
-                <h3>dor: {val.dor}</h3>
-
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="2000..."
-                  onChange={(event) => {
-                    setNewArtist(event.target.value);
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    updateSongsArtist(val.id);
-                  }}
-                >
-                  {" "}
-                  Update
-                </button>
-
-                <button
-                  onClick={() => {
-                    deleteSongs(val.id);
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          );
-        })}
+      
+     
       </div>
     </div>
+    </div>
+    
   );
 }
 
